@@ -4,9 +4,9 @@ const source=$("#sourceCanvas"),visitor=$("#visitorCanvas"),srcCtx=source.getCon
 const photoFrame=$("#photoFrame"),encounterButton=$("#encounterButton"),saveButton=$("#saveButton"),status=$("#status");
 const professor=new Image();
 const professorCrop={x:114,y:1035,width:1866,height:2485};
-const professorPresentation={heightRatio:.48,maxWidthRatio:.34,visibleRatio:.58};
+const professorPresentation={heightRatio:.60,maxWidthRatio:.42,visibleRatio:.64};
 professor.src="assets/professor-adelie-owner-approved.png";
-let loaded=false,professorReady=false,running=false,encounterCount=0,animationFrame=0,fileStem="penguin-encounter",savePrepared=false,saveUrl="";
+let loaded=false,professorReady=false,running=false,animationFrame=0,fileStem="penguin-encounter",savePrepared=false,saveUrl="";
 professor.onload=()=>{professorReady=true;if(loaded)encounterButton.disabled=false;};
 
 const prefersReducedMotion=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -28,23 +28,22 @@ function loadFile(file){
   image.onerror=()=>{URL.revokeObjectURL(url);alert("That photograph could not be opened. Please try another.");};image.src=url;
 }
 
-function placement(side,progress){
+function placement(progress){
   const ratio=professorCrop.width/professorCrop.height,maxWidth=source.width*professorPresentation.maxWidthRatio;
   let height=source.height*professorPresentation.heightRatio,width=height*ratio;
   if(width>maxWidth){width=maxWidth;height=width/ratio;}
-  const y=Math.max(source.height*.2,source.height-height*.97),hidden=side==="right"?source.width+width*.035:-width*1.035;
-  const visible=side==="right"?source.width-width*professorPresentation.visibleRatio:-width*(1-professorPresentation.visibleRatio);
+  const y=Math.max(source.height*.2,source.height-height*.97),hidden=source.width+width*.035;
+  const visible=source.width-width*professorPresentation.visibleRatio;
   return{x:hidden+(visible-hidden)*progress,y,width,height};
 }
 
-function drawProfessor(side,progress){
+function drawProfessor(progress){
   visitorCtx.clearRect(0,0,visitor.width,visitor.height);if(progress<=0)return;
-  let{x,y,width,height}=placement(side,progress);
+  let{x,y,width,height}=placement(progress);
   if(progress===1){x=Math.round(x);y=Math.round(y);width=Math.round(width);height=Math.round(height);}
-  const lift=Math.sin(progress*Math.PI)*source.height*.006,lean=(1-progress)*.012*(side==="right"?-1:1);visitorCtx.save();
+  const lift=Math.sin(progress*Math.PI)*source.height*.006,lean=(1-progress)*-.012;visitorCtx.save();
   visitorCtx.translate(x+width/2,y+height+lift);visitorCtx.rotate(lean);
-  const draw=()=>visitorCtx.drawImage(professor,professorCrop.x,professorCrop.y,professorCrop.width,professorCrop.height,-width/2,-height,width,height);
-  if(side==="left"){visitorCtx.scale(-1,1);draw();}else draw();
+  visitorCtx.drawImage(professor,professorCrop.x,professorCrop.y,professorCrop.width,professorCrop.height,-width/2,-height,width,height);
   visitorCtx.restore();
 }
 
@@ -52,20 +51,20 @@ function animateEncounter(){
   if(!loaded||!professorReady||running)return;
   running=true;savePrepared=false;encounterButton.disabled=true;saveButton.hidden=true;status.textContent="Stay with the photograph for a moment.";
   const reduced=prefersReducedMotion(),pause=reduced?300:850,enter=reduced?350:1600,hold=reduced?3400:5000,leave=reduced?350:1600,total=pause+enter+hold+leave;
-  const side=encounterCount++%2===0?"right":"left",started=performance.now();
+  const started=performance.now();
   function frame(now){
     const elapsed=now-started;let progress=0;
     if(elapsed<pause)progress=0;
     else if(elapsed<pause+enter)progress=ease((elapsed-pause)/enter);
     else if(elapsed<pause+enter+hold)progress=1;
     else if(elapsed<total)progress=1-ease((elapsed-pause-enter-hold)/leave);
-    drawProfessor(side,progress);
+    drawProfessor(progress);
     const visiting=elapsed>=pause+enter&&elapsed<pause+enter+hold;
     if(visiting&&!savePrepared){savePrepared=true;prepareSave();}
     if(!visiting&&elapsed>=pause+enter+hold)saveButton.hidden=true;
     if(visiting)status.textContent="Professor Adelie is visiting.";
     else if(elapsed>=pause+enter+hold)status.textContent="Professor Adelie is leaving.";
-    if(elapsed<total)animationFrame=requestAnimationFrame(frame);else{drawProfessor(side,0);saveButton.hidden=true;running=false;encounterButton.disabled=false;status.textContent="Until next time.";}
+    if(elapsed<total)animationFrame=requestAnimationFrame(frame);else{drawProfessor(0);saveButton.hidden=true;running=false;encounterButton.disabled=false;status.textContent="Until next time.";}
   }
   animationFrame=requestAnimationFrame(frame);
 }
