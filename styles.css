@@ -24,7 +24,7 @@ h1,h2 { font-family:Georgia,'Times New Roman',serif; font-weight:400; margin:0; 
 .photo-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
 .photo-head h2 { font-size:36px; }
 .text-button { border:0; background:none; text-decoration:underline; text-underline-offset:5px; cursor:pointer; color:inherit; font:600 13px/1.2 Inter,ui-sans-serif,system-ui,sans-serif; }
-.photo-frame { position:relative; display:grid; width:100%; overflow:hidden; background:#d9d5ca; isolation:isolate; }
+.photo-frame { position:relative; display:grid; width:100%; margin-inline:auto; overflow:hidden; background:#d9d5ca; isolation:isolate; }
 .photo-frame canvas { grid-area:1/1; display:block; width:100%; height:auto; }
 #visitorCanvas { z-index:1; pointer-events:none; }
 .save-button { position:absolute; z-index:2; right:18px; bottom:18px; border:0; background:rgba(244,241,232,.94); color:var(--ink); padding:13px 16px; display:flex; gap:18px; align-items:center; font:800 13px/1 Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 8px 30px rgba(16,25,21,.18); cursor:pointer; backdrop-filter:blur(8px); text-decoration:none; }

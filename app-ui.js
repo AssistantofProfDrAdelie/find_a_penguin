@@ -1,33 +1,47 @@
 const $=selector=>document.querySelector(selector);
 const fileInput=$("#fileInput"),dropZone=$("#dropZone"),intro=$("#intro"),encounter=$("#encounter");
 const source=$("#sourceCanvas"),visitor=$("#visitorCanvas"),srcCtx=source.getContext("2d"),visitorCtx=visitor.getContext("2d");
-const encounterButton=$("#encounterButton"),saveButton=$("#saveButton"),status=$("#status");
+const photoFrame=$("#photoFrame"),encounterButton=$("#encounterButton"),saveButton=$("#saveButton"),status=$("#status");
 const professor=new Image();
 const professorCrop={x:114,y:1035,width:1866,height:2485};
+const professorPresentation={heightRatio:.48,maxWidthRatio:.34,visibleRatio:.58};
 professor.src="assets/professor-adelie-owner-approved.png";
 let loaded=false,professorReady=false,running=false,encounterCount=0,animationFrame=0,fileStem="penguin-encounter",savePrepared=false,saveUrl="";
 professor.onload=()=>{professorReady=true;if(loaded)encounterButton.disabled=false;};
 
 const prefersReducedMotion=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ease=value=>value<.5?4*value*value*value:1-Math.pow(-2*value+2,3)/2;
+const highQualitySmoothing=context=>{context.imageSmoothingEnabled=true;context.imageSmoothingQuality="high";};
 
 function loadFile(file){
   if(!file||!file.type.startsWith("image/"))return;
   cancelAnimationFrame(animationFrame);running=false;saveButton.hidden=true;visitorCtx.clearRect(0,0,visitor.width,visitor.height);
   const image=new Image(),url=URL.createObjectURL(file);
-  image.onload=()=>{const max=1800,scale=Math.min(1,max/Math.max(image.width,image.height));source.width=visitor.width=Math.round(image.width*scale);source.height=visitor.height=Math.round(image.height*scale);srcCtx.drawImage(image,0,0,source.width,source.height);visitorCtx.clearRect(0,0,visitor.width,visitor.height);URL.revokeObjectURL(url);loaded=true;fileStem=(file.name.replace(/\.[^.]+$/,"")||"photograph")+"-professor-adelie";saveButton.download=`${fileStem}.png`;$("#fileName").textContent=file.name;status.textContent=professorReady?"The photograph is ready.":"Professor Adelie is getting ready.";encounterButton.disabled=!professorReady;intro.hidden=true;encounter.hidden=false;encounter.scrollIntoView({behavior:"smooth",block:"start"});};
+  image.onload=()=>{
+    const max=1800,scale=Math.min(1,max/Math.max(image.width,image.height));
+    source.width=visitor.width=Math.round(image.width*scale);source.height=visitor.height=Math.round(image.height*scale);
+    highQualitySmoothing(srcCtx);highQualitySmoothing(visitorCtx);photoFrame.style.maxWidth=`${source.width}px`;
+    srcCtx.drawImage(image,0,0,source.width,source.height);visitorCtx.clearRect(0,0,visitor.width,visitor.height);
+    URL.revokeObjectURL(url);loaded=true;fileStem=(file.name.replace(/\.[^.]+$/,"" )||"photograph")+"-professor-adelie";saveButton.download=`${fileStem}.png`;$("#fileName").textContent=file.name;
+    status.textContent=professorReady?"The photograph is ready.":"Professor Adelie is getting ready.";encounterButton.disabled=!professorReady;intro.hidden=true;encounter.hidden=false;encounter.scrollIntoView({behavior:"smooth",block:"start"});
+  };
   image.onerror=()=>{URL.revokeObjectURL(url);alert("That photograph could not be opened. Please try another.");};image.src=url;
 }
 
 function placement(side,progress){
-  const ratio=professorCrop.width/professorCrop.height,maxWidth=source.width*.46;let height=source.height*.68,width=height*ratio;if(width>maxWidth){width=maxWidth;height=width/ratio;}
-  const y=Math.max(source.height*.2,source.height-height*.97),hidden=side==="right"?source.width+width*.035:-width*1.035,visible=side==="right"?source.width-width*.64:-width*.36;
+  const ratio=professorCrop.width/professorCrop.height,maxWidth=source.width*professorPresentation.maxWidthRatio;
+  let height=source.height*professorPresentation.heightRatio,width=height*ratio;
+  if(width>maxWidth){width=maxWidth;height=width/ratio;}
+  const y=Math.max(source.height*.2,source.height-height*.97),hidden=side==="right"?source.width+width*.035:-width*1.035;
+  const visible=side==="right"?source.width-width*professorPresentation.visibleRatio:-width*(1-professorPresentation.visibleRatio);
   return{x:hidden+(visible-hidden)*progress,y,width,height};
 }
 
 function drawProfessor(side,progress){
   visitorCtx.clearRect(0,0,visitor.width,visitor.height);if(progress<=0)return;
-  const{x,y,width,height}=placement(side,progress),lift=Math.sin(progress*Math.PI)*source.height*.006,lean=(1-progress)*.012*(side==="right"?-1:1);visitorCtx.save();
+  let{x,y,width,height}=placement(side,progress);
+  if(progress===1){x=Math.round(x);y=Math.round(y);width=Math.round(width);height=Math.round(height);}
+  const lift=Math.sin(progress*Math.PI)*source.height*.006,lean=(1-progress)*.012*(side==="right"?-1:1);visitorCtx.save();
   visitorCtx.translate(x+width/2,y+height+lift);visitorCtx.rotate(lean);
   const draw=()=>visitorCtx.drawImage(professor,professorCrop.x,professorCrop.y,professorCrop.width,professorCrop.height,-width/2,-height,width,height);
   if(side==="left"){visitorCtx.scale(-1,1);draw();}else draw();
