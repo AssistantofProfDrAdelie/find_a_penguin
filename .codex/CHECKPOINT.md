@@ -8,7 +8,7 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 
 - Durable product, autonomy, raw-input, resource, and no-image-generation rules are persisted in `AGENTS.md` and `DESIGN.md`.
 - Cloud-native operation is persisted in `AGENTS.md` and `DESIGN.md`: `main` is the production branch, GitHub Actions is the validation/build/deployment path, and GitHub Pages is the static HTTPS runtime.
-- The sole active flow remains: upload → untouched pause → eased peek → visit/save window → eased retreat → original photograph.
+- The sole active flow is unsolicited and unannounced: upload → photograph alone → eased peek → minimal Save window → eased retreat → photograph alone. There is no encounter button, dynamic status narration, countdown, hint, or explanatory transition.
 - The owner-authorized Public / Private boundary is persisted in `AGENTS.md` and `DESIGN.md`. The repository is Public; raw photographs, corpus notes, and broader source archives remain Private. Access never implies publication.
 - The playable product uses the owner's authoritative supplied cutout unchanged at `assets/professor-adelie-owner-approved.png`. Its transparent bounds are cropped only at render time for sizing and placement. The previous automated derivative is no longer part of the current product.
 - The public repository was rebuilt from the audited current tree as a clean history. Historical private fixtures, raw sources, local paths, and internal corpus material are not reachable from public refs.
@@ -28,7 +28,7 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 - Verified upload, untouched pause, eased entry, inward-facing placement, full visit/save state, downloadable PNG composition, retreat, disappearance, replay readiness, responsive layout, and zero console warnings/errors.
 - Seven tests pass, including exact production-artifact membership and workflow assertions. The exact `dist/` build was served separately and passed the upload → encounter → save-state browser flow with zero console warnings/errors.
 - The repository is public at `https://github.com/AssistantofProfDrAdelie/find_a_penguin` and GitHub Pages is configured for workflow deployment with HTTPS enforcement.
-- GitHub Actions run `35116835940` completed successfully for direction-aware reveal commit `0ff2159`.
+- GitHub Actions run `35118102766` completed successfully for understated automatic-flow commit `cce903d`.
 - The production site at `https://assistantofprofdradelie.github.io/find_a_penguin/` returns HTTPS 200 and serves the approved asset with the exact local SHA-256. Live-browser QA verified upload, encounter, visible save, successful PNG download, complete retreat, replay readiness, and zero console warnings/errors.
 
 ## Next action
