@@ -38,6 +38,7 @@
 
 > The owner provides source material. Codex owns the technical transformation.
 
+- When the owner explicitly supplies or approves a processed visual asset, that asset takes precedence over automatically derived alternatives. Do not “improve” or replace owner-approved visual material without explicit instruction.
 - Expect mixed, messy, uncropped, background-containing, inconsistently named, and non-production-ready assets.
 - Discovery, filtering, visual inspection, selection, conversion, cropping, segmentation, background removal, masking, alpha and edge cleanup, resizing, optimization, compositing, integration, and QA are engineering work. Do not return them to the owner merely because they are inconvenient.
 - If a competent technical team could solve a problem through more work, do the work.

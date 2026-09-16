@@ -1,4 +1,6 @@
 import http.client
+import hashlib
+import struct
 import threading
 import unittest
 from pathlib import Path
@@ -35,12 +37,18 @@ class AppServerTest(unittest.TestCase):
         self.assertEqual(response.getheader("Cache-Control"), "no-store")
         self.assertIn(b'href="./"', body)
 
-    def test_public_professor_derivative_is_present_without_raw_source(self):
-        derivative = Path("assets/professor-adelie-transparent.png")
-        self.assertTrue(derivative.is_file())
-        self.assertGreater(derivative.stat().st_size, 500_000)
-        self.assertTrue(derivative.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
+    def test_owner_approved_professor_asset_is_preserved_without_raw_source(self):
+        approved = Path("assets/professor-adelie-owner-approved.png")
+        self.assertTrue(approved.is_file())
+        contents = approved.read_bytes()
+        self.assertTrue(contents.startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertEqual(struct.unpack(">II", contents[16:24]), (1980, 3520))
+        self.assertEqual(
+            hashlib.sha256(contents).hexdigest(),
+            "f566348a640dc2b735b962ffb3e950914e559f89e214fa8f395f40834a9ebafd",
+        )
         self.assertFalse(Path("assets/source").exists())
+        self.assertFalse(Path("assets/professor-adelie-transparent.png").exists())
 
     def test_ui_contains_complete_encounter_loop(self):
         markup = Path("index.html").read_text()
@@ -51,7 +59,9 @@ class AppServerTest(unittest.TestCase):
         self.assertIn("Professor Adelie is leaving", script)
         self.assertIn("toBlob", script)
         self.assertIn('if(side==="left")', script)
-        self.assertIn("professor-adelie-transparent.png", script)
+        self.assertIn("professor-adelie-owner-approved.png", script)
+        self.assertIn("professorCrop", script)
+        self.assertNotIn("professor-adelie-transparent.png", script)
         self.assertNotIn("professor-adelie-transparent.svg", script)
         self.assertIn('download hidden', markup)
         self.assertNotIn("Penguinness", markup + script)
@@ -59,7 +69,7 @@ class AppServerTest(unittest.TestCase):
 
     def test_javascript_and_asset_have_correct_content_types(self):
         js_response, _ = self.fetch("/app-ui.js")
-        png_response, png = self.fetch("/assets/professor-adelie-transparent.png")
+        png_response, png = self.fetch("/assets/professor-adelie-owner-approved.png")
         self.assertIn("javascript", js_response.getheader("Content-Type"))
         self.assertIn("png", png_response.getheader("Content-Type"))
         self.assertTrue(png.startswith(b"\x89PNG\r\n\x1a\n"))

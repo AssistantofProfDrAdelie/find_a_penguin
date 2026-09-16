@@ -2,7 +2,9 @@ const $=selector=>document.querySelector(selector);
 const fileInput=$("#fileInput"),dropZone=$("#dropZone"),intro=$("#intro"),encounter=$("#encounter");
 const source=$("#sourceCanvas"),visitor=$("#visitorCanvas"),srcCtx=source.getContext("2d"),visitorCtx=visitor.getContext("2d");
 const encounterButton=$("#encounterButton"),saveButton=$("#saveButton"),status=$("#status");
-const professor=new Image();professor.src="assets/professor-adelie-transparent.png";
+const professor=new Image();
+const professorCrop={x:114,y:1035,width:1866,height:2485};
+professor.src="assets/professor-adelie-owner-approved.png";
 let loaded=false,professorReady=false,running=false,encounterCount=0,animationFrame=0,fileStem="penguin-encounter",savePrepared=false,saveUrl="";
 professor.onload=()=>{professorReady=true;if(loaded)encounterButton.disabled=false;};
 
@@ -18,7 +20,7 @@ function loadFile(file){
 }
 
 function placement(side,progress){
-  const ratio=professor.naturalWidth/professor.naturalHeight,maxWidth=source.width*.46;let height=source.height*.68,width=height*ratio;if(width>maxWidth){width=maxWidth;height=width/ratio;}
+  const ratio=professorCrop.width/professorCrop.height,maxWidth=source.width*.46;let height=source.height*.68,width=height*ratio;if(width>maxWidth){width=maxWidth;height=width/ratio;}
   const y=Math.max(source.height*.2,source.height-height*.97),hidden=side==="right"?source.width+width*.035:-width*1.035,visible=side==="right"?source.width-width*.64:-width*.36;
   return{x:hidden+(visible-hidden)*progress,y,width,height};
 }
@@ -27,7 +29,8 @@ function drawProfessor(side,progress){
   visitorCtx.clearRect(0,0,visitor.width,visitor.height);if(progress<=0)return;
   const{x,y,width,height}=placement(side,progress),lift=Math.sin(progress*Math.PI)*source.height*.006,lean=(1-progress)*.012*(side==="right"?-1:1);visitorCtx.save();
   visitorCtx.translate(x+width/2,y+height+lift);visitorCtx.rotate(lean);
-  if(side==="left"){visitorCtx.scale(-1,1);visitorCtx.drawImage(professor,-width/2,-height,width,height);}else visitorCtx.drawImage(professor,-width/2,-height,width,height);
+  const draw=()=>visitorCtx.drawImage(professor,professorCrop.x,professorCrop.y,professorCrop.width,professorCrop.height,-width/2,-height,width,height);
+  if(side==="left"){visitorCtx.scale(-1,1);draw();}else draw();
   visitorCtx.restore();
 }
 

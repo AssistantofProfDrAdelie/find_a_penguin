@@ -11,7 +11,7 @@ RUNTIME_FILES = (
     Path("index.html"),
     Path("styles.css"),
     Path("app-ui.js"),
-    Path("assets/professor-adelie-transparent.png"),
+    Path("assets/professor-adelie-owner-approved.png"),
 )
 
 

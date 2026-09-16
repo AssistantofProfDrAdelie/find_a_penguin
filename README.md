@@ -26,9 +26,11 @@ Professor Adelie pauses, peeks in from an edge, stays briefly with a save option
 
 ## Character asset
 
-The public product includes only the approved processed Professor Adelie cutout
-at `assets/professor-adelie-transparent.png`. Raw photographs and the broader
-source archive remain private and are not required by the production build.
+The public product includes only the owner-approved Professor Adelie cutout
+at `assets/professor-adelie-owner-approved.png`. The supplied PNG is preserved
+unchanged; the browser uses its transparent bounds for placement. Raw photographs
+and the broader source archive remain private and are not required by the
+production build.
 
 ## Test it
 
@@ -38,4 +40,4 @@ python3 scripts/build_static.py
 ```
 
 The production artifact is written to `dist/`. Only `index.html`, `styles.css`,
-`app-ui.js`, `.nojekyll`, and the cleaned runtime PNG are included.
+`app-ui.js`, `.nojekyll`, and the owner-approved runtime PNG are included.

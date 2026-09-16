@@ -19,7 +19,7 @@ class StaticBuildTest(unittest.TestCase):
                 "index.html",
                 "styles.css",
                 "app-ui.js",
-                "assets/professor-adelie-transparent.png",
+                "assets/professor-adelie-owner-approved.png",
             },
         )
         self.assertFalse((OUTPUT / "app.py").exists())
