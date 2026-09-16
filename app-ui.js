@@ -1,7 +1,7 @@
 const $=selector=>document.querySelector(selector);
 const fileInput=$("#fileInput"),dropZone=$("#dropZone"),intro=$("#intro"),encounter=$("#encounter");
 const source=$("#sourceCanvas"),visitor=$("#visitorCanvas"),srcCtx=source.getContext("2d"),visitorCtx=visitor.getContext("2d");
-const photoFrame=$("#photoFrame"),encounterButton=$("#encounterButton"),saveButton=$("#saveButton"),status=$("#status");
+const photoFrame=$("#photoFrame"),saveButton=$("#saveButton");
 const professor=new Image();
 const professorCrop={x:114,y:1035,width:1866,height:2485};
 const professorPresentation={
@@ -11,9 +11,9 @@ const professorPresentation={
 };
 const encounterDirections=["right","left","bottom"];
 professor.src="assets/professor-adelie-owner-approved.png";
-let loaded=false,professorReady=false,running=false,animationFrame=0,fileStem="penguin-encounter",savePrepared=false,saveUrl="",encounterCount=0;
+let loaded=false,professorReady=false,running=false,animationFrame=0,encounterTimer=0,fileStem="penguin-encounter",savePrepared=false,saveUrl="",encounterCount=0;
 const directionOffset=Math.floor(Math.random()*encounterDirections.length);
-professor.onload=()=>{professorReady=true;if(loaded)encounterButton.disabled=false;};
+professor.onload=()=>{professorReady=true;scheduleEncounter();};
 
 const prefersReducedMotion=()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ease=value=>value<.5?4*value*value*value:1-Math.pow(-2*value+2,3)/2;
@@ -21,17 +21,22 @@ const highQualitySmoothing=context=>{context.imageSmoothingEnabled=true;context.
 
 function loadFile(file){
   if(!file||!file.type.startsWith("image/"))return;
-  cancelAnimationFrame(animationFrame);running=false;saveButton.hidden=true;visitorCtx.clearRect(0,0,visitor.width,visitor.height);
+  clearTimeout(encounterTimer);cancelAnimationFrame(animationFrame);loaded=false;running=false;saveButton.hidden=true;visitorCtx.clearRect(0,0,visitor.width,visitor.height);
   const image=new Image(),url=URL.createObjectURL(file);
   image.onload=()=>{
     const max=1800,scale=Math.min(1,max/Math.max(image.width,image.height));
     source.width=visitor.width=Math.round(image.width*scale);source.height=visitor.height=Math.round(image.height*scale);
     highQualitySmoothing(srcCtx);highQualitySmoothing(visitorCtx);photoFrame.style.maxWidth=`${source.width}px`;
     srcCtx.drawImage(image,0,0,source.width,source.height);visitorCtx.clearRect(0,0,visitor.width,visitor.height);
-    URL.revokeObjectURL(url);loaded=true;fileStem=(file.name.replace(/\.[^.]+$/,"" )||"photograph")+"-professor-adelie";saveButton.download=`${fileStem}.png`;$("#fileName").textContent=file.name;
-    status.textContent=professorReady?"The photograph is ready.":"Professor Adelie is getting ready.";encounterButton.disabled=!professorReady;intro.hidden=true;encounter.hidden=false;encounter.scrollIntoView({behavior:"smooth",block:"start"});
+    URL.revokeObjectURL(url);loaded=true;fileStem=(file.name.replace(/\.[^.]+$/,"" )||"photograph")+"-professor-adelie";saveButton.download=`${fileStem}.png`;
+    intro.hidden=true;encounter.hidden=false;encounter.scrollIntoView({behavior:"smooth",block:"start"});scheduleEncounter();
   };
   image.onerror=()=>{URL.revokeObjectURL(url);alert("That photograph could not be opened. Please try another.");};image.src=url;
+}
+
+function scheduleEncounter(){
+  clearTimeout(encounterTimer);if(!loaded||!professorReady)return;
+  encounterTimer=setTimeout(animateEncounter,250);
 }
 
 function placement(direction,progress){
@@ -61,8 +66,8 @@ function drawProfessor(direction,progress){
 
 function animateEncounter(){
   if(!loaded||!professorReady||running)return;
-  running=true;savePrepared=false;encounterButton.disabled=true;saveButton.hidden=true;status.textContent="Stay with the photograph for a moment.";
-  const reduced=prefersReducedMotion(),pause=reduced?300:850,enter=reduced?350:1600,hold=reduced?3400:5000,leave=reduced?350:1600,total=pause+enter+hold+leave;
+  running=true;savePrepared=false;saveButton.hidden=true;
+  const reduced=prefersReducedMotion(),pause=reduced?500:1000,enter=reduced?350:1600,hold=reduced?3400:5000,leave=reduced?350:1600,total=pause+enter+hold+leave;
   const direction=encounterDirections[(directionOffset+encounterCount++)%encounterDirections.length],started=performance.now();visitor.dataset.entryDirection=direction;
   function frame(now){
     const elapsed=now-started;let progress=0;
@@ -74,9 +79,7 @@ function animateEncounter(){
     const visiting=elapsed>=pause+enter&&elapsed<pause+enter+hold;
     if(visiting&&!savePrepared){savePrepared=true;prepareSave();}
     if(!visiting&&elapsed>=pause+enter+hold)saveButton.hidden=true;
-    if(visiting)status.textContent="Professor Adelie is visiting.";
-    else if(elapsed>=pause+enter+hold)status.textContent="Professor Adelie is leaving.";
-    if(elapsed<total)animationFrame=requestAnimationFrame(frame);else{drawProfessor(direction,0);saveButton.hidden=true;running=false;encounterButton.disabled=false;status.textContent="Until next time.";}
+    if(elapsed<total)animationFrame=requestAnimationFrame(frame);else{drawProfessor(direction,0);saveButton.hidden=true;running=false;}
   }
   animationFrame=requestAnimationFrame(frame);
 }
@@ -90,5 +93,4 @@ fileInput.addEventListener("change",event=>loadFile(event.target.files[0]));
 ["dragenter","dragover"].forEach(type=>dropZone.addEventListener(type,event=>{event.preventDefault();dropZone.classList.add("dragging");}));
 ["dragleave","drop"].forEach(type=>dropZone.addEventListener(type,event=>{event.preventDefault();dropZone.classList.remove("dragging");}));
 dropZone.addEventListener("drop",event=>loadFile(event.dataTransfer.files[0]));
-encounterButton.addEventListener("click",animateEncounter);
 $("#changeButton").addEventListener("click",()=>{fileInput.value="";fileInput.click();});

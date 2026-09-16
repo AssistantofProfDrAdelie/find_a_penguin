@@ -20,9 +20,9 @@ Requires Python 3.10 or newer.
 python3 app.py
 ```
 
-Open <http://127.0.0.1:8000>, choose a photograph, and press **Encounter a Penguin**.
+Open <http://127.0.0.1:8000> and choose a photograph.
 
-Professor Adelie pauses, peeks in from an edge, stays briefly with a save option, then retreats. The photograph is never uploaded or modified.
+After a quiet pause, Professor Adelie peeks in from an edge, stays briefly with a save option, then retreats. The photograph is never uploaded or modified.
 
 ## Character asset
 

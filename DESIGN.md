@@ -16,7 +16,7 @@ Keep the UI understated. Do not over-intellectualize or explain the joke.
 
 ## Core encounter
 
-The user chooses an ordinary photograph and triggers **Encounter a Penguin**. After a brief untouched pause, Professor Adelie cautiously peeks from an edge or corner, remains long enough to be noticed or saved, then slowly retreats and disappears. The source photograph remains unchanged; saving creates a separate composite capture only while he is visible.
+The user chooses an ordinary photograph. After a brief untouched pause, Professor Adelie cautiously peeks from an edge or corner without being requested or announced, remains long enough to be noticed or saved, then slowly retreats and disappears. The source photograph remains unchanged; saving creates a separate composite capture only while he is visible.
 
 The motion should feel like a temporary visit, not a pop, a mechanical full-image slide, or an elaborate character animation. Small inexpensive variation is welcome when it improves repeat encounters. Do not add scene understanding merely to choose placement.
 
