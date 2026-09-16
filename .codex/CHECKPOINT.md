@@ -20,15 +20,15 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 
 ## Validation
 
-- The processed public PNG is served with the expected content; its private raw source is not required by tests or the production build.
+- The owner-approved public PNG is preserved byte-for-byte at 1980×3520 with SHA-256 `f566348a640dc2b735b962ffb3e950914e559f89e214fa8f395f40834a9ebafd`; its private raw source is not required by tests or the production build.
 - JavaScript syntax, Python compilation, and deterministic static production builds pass.
-- Visually inspected the alpha at source scale and on a high-contrast background; no visible source-background halo remains around the cap, face, or tassel at product scale. The intentional lower crop is hidden beyond the photograph edge.
-- In-app browser QA passed at the default desktop viewport and 390×844 mobile viewport.
+- Visually inspected the owner-approved alpha asset and its runtime crop. The character's supplied pixels are unchanged; only transparent canvas margins are excluded during compositing.
+- In-app browser QA passed at the default desktop viewport; the responsive layout code is unchanged from the previously verified 390×844 build.
 - Verified upload, untouched pause, eased entry, inward-facing placement, full visit/save state, downloadable PNG composition, retreat, disappearance, replay readiness, responsive layout, and zero console warnings/errors.
 - Seven tests pass, including exact production-artifact membership and workflow assertions. The exact `dist/` build was served separately and passed the upload → encounter → save-state browser flow with zero console warnings/errors.
 - The repository is public at `https://github.com/AssistantofProfDrAdelie/find_a_penguin` and GitHub Pages is configured for workflow deployment with HTTPS enforcement.
-- GitHub Actions run `35109201197` completed successfully for the clean public root commit.
-- The production site at `https://assistantofprofdradelie.github.io/find_a_penguin/` returns HTTPS 200 for the app and processed character asset. Live-browser QA verified upload, encounter, visible save, successful PNG download, complete retreat, replay readiness, and zero console warnings/errors.
+- GitHub Actions run `35111583151` completed successfully for owner-approved asset commit `689ea1b`.
+- The production site at `https://assistantofprofdradelie.github.io/find_a_penguin/` returns HTTPS 200 and serves the approved asset with the exact local SHA-256. Live-browser QA verified upload, encounter, visible save, successful PNG download, complete retreat, replay readiness, and zero console warnings/errors.
 
 ## Next action
 
