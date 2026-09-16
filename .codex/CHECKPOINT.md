@@ -15,6 +15,7 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 - The character is rendered on a separate transparent canvas; the uploaded photograph remains on its own canvas.
 - Save creates a new PNG from both canvases only while the visitor is fully present.
 - Encounters alternate right and left edges; Professor Adelie's real left-facing pose is used on the right and mirrored only on the left so he always faces into the photograph.
+- Visual-quality diagnosis found no encoding loss or asset upscaling: the approved PNG is lossless and its 1866×2485 visible crop exceeds the rendered character size. Softness came from CSS enlargement of low-resolution canvases, fractional stationary placement, and an overlarge 68%-height presentation. The app now caps the display at the upload's raster width, requests high-quality canvas resampling, pixel-aligns the held pose, and uses a reference-informed 48%-height maximum.
 - Runtime dependency audit: `index.html`, `styles.css`, `app-ui.js`, and `assets/professor-adelie-owner-approved.png` are production files. `app.py` is a local-development server. Tests and private source material are development-only. No runtime secrets, environment variables, backend, database, local mounts, or cloud configuration are required.
 - `scripts/build_static.py` creates a whitelist-only `dist/` artifact and `.github/workflows/deploy-pages.yml` tests, builds, and deploys `main` with official GitHub Pages actions.
 
@@ -23,11 +24,11 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 - The owner-approved public PNG is preserved byte-for-byte at 1980×3520 with SHA-256 `f566348a640dc2b735b962ffb3e950914e559f89e214fa8f395f40834a9ebafd`; its private raw source is not required by tests or the production build.
 - JavaScript syntax, Python compilation, and deterministic static production builds pass.
 - Visually inspected the owner-approved alpha asset and its runtime crop. The character's supplied pixels are unchanged; only transparent canvas margins are excluded during compositing.
-- In-app browser QA passed at the default desktop viewport; the responsive layout code is unchanged from the previously verified 390×844 build.
+- In-app browser QA passed at desktop and 390×844 mobile viewports with the sharper, reduced-scale visitor.
 - Verified upload, untouched pause, eased entry, inward-facing placement, full visit/save state, downloadable PNG composition, retreat, disappearance, replay readiness, responsive layout, and zero console warnings/errors.
 - Seven tests pass, including exact production-artifact membership and workflow assertions. The exact `dist/` build was served separately and passed the upload → encounter → save-state browser flow with zero console warnings/errors.
 - The repository is public at `https://github.com/AssistantofProfDrAdelie/find_a_penguin` and GitHub Pages is configured for workflow deployment with HTTPS enforcement.
-- GitHub Actions run `35111583151` completed successfully for owner-approved asset commit `689ea1b`.
+- GitHub Actions run `35114143098` completed successfully for visual-quality commit `c38a7f4`.
 - The production site at `https://assistantofprofdradelie.github.io/find_a_penguin/` returns HTTPS 200 and serves the approved asset with the exact local SHA-256. Live-browser QA verified upload, encounter, visible save, successful PNG download, complete retreat, replay readiness, and zero console warnings/errors.
 
 ## Next action
