@@ -10,8 +10,8 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 - Cloud-native operation is persisted in `AGENTS.md` and `DESIGN.md`: `main` is the production branch, GitHub Actions is the validation/build/deployment path, and GitHub Pages is the static HTTPS runtime.
 - The sole active flow remains: upload → untouched pause → eased peek → visit/save window → eased retreat → original photograph.
 - The owner-authorized Public / Private boundary is persisted in `AGENTS.md` and `DESIGN.md`. The repository is Public; raw photographs, corpus notes, and broader source archives remain Private. Access never implies publication.
-- The playable product uses only the approved processed asset at `assets/professor-adelie-transparent.png`. Its raw photographic source and internal corpus notes are excluded from the current tree and are being purged from reachable Git history before publication.
-- The invented SVG placeholder and its fixture are removed from the active tree. Git history preserves them.
+- The playable product uses only the approved processed asset at `assets/professor-adelie-transparent.png`. Its raw photographic source and internal corpus notes are absent from the current tree and all reachable public Git history.
+- The public repository was rebuilt from the audited current tree as a clean history. Historical private fixtures, raw sources, local paths, and internal corpus material are not reachable from public refs.
 - The character is rendered on a separate transparent canvas; the uploaded photograph remains on its own canvas.
 - Save creates a new PNG from both canvases only while the visitor is fully present.
 - Encounters alternate right and left edges; Professor Adelie's real left-facing pose is used on the right and mirrored only on the left so he always faces into the photograph.
@@ -26,7 +26,10 @@ Operate Encounter Penguin independently of the owner's Mac through GitHub-driven
 - In-app browser QA passed at the default desktop viewport and 390×844 mobile viewport.
 - Verified upload, untouched pause, eased entry, inward-facing placement, full visit/save state, downloadable PNG composition, retreat, disappearance, replay readiness, responsive layout, and zero console warnings/errors.
 - Seven tests pass, including exact production-artifact membership and workflow assertions. The exact `dist/` build was served separately and passed the upload → encounter → save-state browser flow with zero console warnings/errors.
+- The repository is public at `https://github.com/AssistantofProfDrAdelie/find_a_penguin` and GitHub Pages is configured for workflow deployment with HTTPS enforcement.
+- GitHub Actions run `35109201197` completed successfully for the clean public root commit.
+- The production site at `https://assistantofprofdradelie.github.io/find_a_penguin/` returns HTTPS 200 for the app and processed character asset. Live-browser QA verified upload, encounter, visible save, successful PNG download, complete retreat, replay readiness, and zero console warnings/errors.
 
 ## Next action
 
-Complete the history purge and repeat the publication-safety audit. Then use the owner's explicit authorization to make the repository public, initialize Pages with `build_type: workflow`, rerun deployment, and verify the live HTTPS interaction.
+Owner product evaluation of the live encounter. No engineering or publication blocker remains.
