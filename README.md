@@ -1,5 +1,11 @@
 # Encounter a Penguin
 
+> **Archived:** This is the historical incubation repository for Encounter
+> Penguin. Active development moved to the University of Antarctica, and
+> `University-of-Antarctica-Web` is the sole active source of truth. Do not
+> synchronize this repository with the University project; make all new
+> Encounter Penguin changes there.
+
 An ordinary photograph. A brief visit from Professor Adelie.
 
 ## Historical migration snapshot
