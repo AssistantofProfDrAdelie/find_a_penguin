@@ -2,15 +2,15 @@
 
 An ordinary photograph. A brief visit from Professor Adelie.
 
-## Live application
+## Historical migration snapshot
 
-The production application is deployed from `main` to GitHub Pages:
+This standalone repository is retired and preserved only as migration
+provenance for commit `975a030`. Encounter Penguin's sole active source of
+truth is now the University of Antarctica repository at
+`experiences/encounter-penguin/`.
 
-<https://assistantofprofdradelie.github.io/find_a_penguin/>
-
-Pushes to `main` run tests, build a minimal static artifact, and deploy it. The
-deployed application is browser-only: it needs no server, secrets, database, or
-access to the owner's computer or raw asset archive.
+Do not develop or deploy from this repository. There is no synchronization path
+to the University repository.
 
 ## Local development
 

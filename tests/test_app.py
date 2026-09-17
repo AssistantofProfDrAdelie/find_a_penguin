@@ -90,13 +90,12 @@ class AppServerTest(unittest.TestCase):
         response, _ = self.fetch("/not-here")
         self.assertEqual(response.status, 404)
 
-    def test_cloud_deployment_workflow_is_main_driven(self):
-        workflow = Path(".github/workflows/deploy-pages.yml").read_text()
-        self.assertIn("branches: [main]", workflow)
-        self.assertIn("python3 scripts/build_static.py", workflow)
-        self.assertIn("actions/upload-pages-artifact@v4", workflow)
-        self.assertIn("actions/deploy-pages@v4", workflow)
-        self.assertIn("path: dist", workflow)
+    def test_standalone_repository_is_retired(self):
+        self.assertFalse(Path(".github/workflows/deploy-pages.yml").exists())
+        readme = Path("README.md").read_text()
+        normalized_readme = " ".join(readme.split())
+        self.assertIn("sole active source of truth", normalized_readme)
+        self.assertIn("There is no synchronization path", normalized_readme)
 
 
 if __name__ == "__main__":
